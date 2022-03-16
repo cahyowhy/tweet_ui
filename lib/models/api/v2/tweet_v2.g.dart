@@ -52,7 +52,7 @@ const _$ReferencedTweetTypeEnumMap = {
 
 TweetV2Attachment _$TweetV2AttachmentFromJson(Map<String, dynamic> json) =>
     TweetV2Attachment(
-      mediaKeys: (json['mediaKeys'] as List<dynamic>?)
+      mediaKeys: (json['media_keys'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           const [],

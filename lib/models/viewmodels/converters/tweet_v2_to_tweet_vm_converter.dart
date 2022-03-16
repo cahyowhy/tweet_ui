@@ -171,7 +171,7 @@ class TweetV2ToTweetVMConverter {
 
     return TweetV2ToTweetVMConverter(TweetV2Response(
       data: [quotedTweet],
-      includes: TweetV2Includes(),
+      includes: _getTweetV2IncludesRetweet(quotedTweet),
     )).convert(createdDateDisplayFormat);
   }
 
@@ -190,8 +190,32 @@ class TweetV2ToTweetVMConverter {
 
     return TweetV2ToTweetVMConverter(TweetV2Response(
       data: [quotedTweet],
-      includes: TweetV2Includes(),
+      includes: _getTweetV2IncludesRetweet(quotedTweet),
     )).convert(createdDateDisplayFormat);
+  }
+
+  TweetV2Includes _getTweetV2IncludesRetweet(TweetV2 quotedTweet) {
+    var authorID = quotedTweet.authorId;
+    List<UserV2> users = [];
+    if (authorID != null) {
+      users =
+          tweetResponse.includes.users.where((e) => e.id == authorID).toList();
+    }
+
+    List<MediaV2> medias = [];
+    var mediaKeys = quotedTweet.attachments.mediaKeys;
+    if (mediaKeys.isNotEmpty) {
+      for (var mKey in quotedTweet.attachments.mediaKeys) {
+        for (var media in tweetResponse.includes.media) {
+          if (mKey == media.mediaKey) {
+            medias.add(media);
+            continue;
+          }
+        }
+      }
+    }
+
+    return TweetV2Includes(users: users, media: medias);
   }
 
   bool _userVerified() => tweetAuthor()?.verified ?? false;

@@ -108,6 +108,7 @@ class ReferencedTweet {
 @JsonSerializable()
 class TweetV2Attachment {
   /// The media keys (ids) for media attached to a tweet. Media could be one of: gif, photo, video.
+  @JsonKey(name: "media_keys")
   final List<String> mediaKeys;
 
   const TweetV2Attachment({this.mediaKeys = const []});
